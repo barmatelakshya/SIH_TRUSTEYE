@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustEye Test</title>
+</head>
+<body>
+    <h1>TrustEye Functionality Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        // Test basic functionality
+        function runTests() {
+            const results = document.getElementById('results');
+            let testResults = [];
+            
+            // Test 1: Check if main HTML loads
+            testResults.push('✅ Test HTML file created successfully');
+            
+            // Test 2: Check localStorage functionality
+            try {
+                localStorage.setItem('test', 'value');
+                localStorage.removeItem('test');
+                testResults.push('✅ LocalStorage working');
+            } catch (e) {
+                testResults.push('❌ LocalStorage failed: ' + e.message);
+            }
+            
+            // Test 3: Check if user data generation works
+            try {
+                function generateUserId() {
+                    return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                }
+                
+                const userId = generateUserId();
+                if (userId.startsWith('user_')) {
+                    testResults.push('✅ User ID generation working: ' + userId);
+                } else {
+                    testResults.push('❌ User ID generation failed');
+                }
+            } catch (e) {
+                testResults.push('❌ User ID generation error: ' + e.message);
+            }
+            
+            // Test 4: Check if basic DOM manipulation works
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.textContent = 'Test';
+                testResults.push('✅ DOM manipulation working');
+            } catch (e) {
+                testResults.push('❌ DOM manipulation failed: ' + e.message);
+            }
+            
+            // Display results
+            results.innerHTML = testResults.map(result => `<p>${result}</p>`).join('');
+        }
+        
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

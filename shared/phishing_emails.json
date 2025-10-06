@@ -1,0 +1,42 @@
+[
+  {
+    "text": "URGENT: Your account will be suspended in 24 hours. Click here to verify your identity immediately.",
+    "label": 1,
+    "type": "email"
+  },
+  {
+    "text": "Congratulations! You've won $1000. Click this link to claim your prize now!",
+    "label": 1,
+    "type": "email"
+  },
+  {
+    "text": "Your bank account has been compromised. Please update your password immediately by clicking here.",
+    "label": 1,
+    "type": "email"
+  },
+  {
+    "text": "Thank you for your recent purchase. Your order #12345 will be delivered tomorrow.",
+    "label": 0,
+    "type": "email"
+  },
+  {
+    "text": "Meeting scheduled for 3 PM today in conference room A. Please bring your reports.",
+    "label": 0,
+    "type": "email"
+  },
+  {
+    "text": "Your subscription expires next month. Renew now to continue enjoying our services.",
+    "label": 0,
+    "type": "email"
+  },
+  {
+    "text": "FINAL NOTICE: Pay now or face legal action. Click to pay immediately.",
+    "label": 1,
+    "type": "email"
+  },
+  {
+    "text": "Limited time offer! 90% discount on all items. Act fast before it expires!",
+    "label": 1,
+    "type": "email"
+  }
+]

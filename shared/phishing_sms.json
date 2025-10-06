@@ -1,0 +1,37 @@
+[
+  {
+    "text": "ALERT: Suspicious activity on your account. Verify now: bit.ly/verify123",
+    "label": 1,
+    "type": "sms"
+  },
+  {
+    "text": "You've won a free iPhone! Claim here: tinyurl.com/freeiphone",
+    "label": 1,
+    "type": "sms"
+  },
+  {
+    "text": "Your OTP is 123456. Valid for 10 minutes. Do not share with anyone.",
+    "label": 0,
+    "type": "sms"
+  },
+  {
+    "text": "Package delivery failed. Reschedule: short.link/delivery",
+    "label": 1,
+    "type": "sms"
+  },
+  {
+    "text": "Appointment confirmed for tomorrow at 2 PM. See you then!",
+    "label": 0,
+    "type": "sms"
+  },
+  {
+    "text": "URGENT: Tax refund pending. Claim now: gov-refund.net/claim",
+    "label": 1,
+    "type": "sms"
+  },
+  {
+    "text": "Your ride is arriving in 5 minutes. Driver: John, Car: ABC123",
+    "label": 0,
+    "type": "sms"
+  }
+]

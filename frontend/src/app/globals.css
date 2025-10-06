@@ -1,0 +1,358 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile-first responsive design */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Large text accessibility */
+  .large-text {
+    font-size: 18px;
+  }
+  
+  .large-text h1 { font-size: 2.5rem; }
+  .large-text h2 { font-size: 2rem; }
+  .large-text h3 { font-size: 1.5rem; }
+  .large-text .text-sm { font-size: 1rem; }
+  .large-text .text-xs { font-size: 0.9rem; }
+}
+
+/* High contrast mode */
+.high-contrast {
+  --tw-bg-white: #000000;
+  --tw-text-gray-900: #ffffff;
+  --tw-text-gray-600: #cccccc;
+  --tw-bg-gray-50: #1a1a1a;
+  --tw-border-gray-200: #666666;
+}
+
+.high-contrast .bg-white { background-color: #000000 !important; color: #ffffff !important; }
+.high-contrast .text-gray-900 { color: #ffffff !important; }
+.high-contrast .text-gray-600 { color: #cccccc !important; }
+.high-contrast .bg-gray-50 { background-color: #1a1a1a !important; }
+.high-contrast .border-gray-200 { border-color: #666666 !important; }
+.high-contrast .bg-indigo-600 { background-color: #0066ff !important; }
+
+@layer components {
+  /* Touch-friendly navigation */
+  .nav-link {
+    @apply text-gray-700 hover:text-indigo-600 transition-colors duration-200 px-3 py-2 rounded-md text-sm font-medium;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mobile-nav-link {
+    @apply block px-4 py-3 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-inset;
+    min-height: 48px;
+  }
+  
+  /* Touch-friendly buttons */
+  .mobile-menu-btn {
+    @apply p-3 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  
+  .accessibility-btn {
+    @apply w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+  }
+  
+  .mobile-accessibility-btn {
+    @apply px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500;
+    min-height: 36px;
+  }
+  
+  /* Touch-friendly form elements */
+  .touch-input {
+    @apply w-full p-4 border-2 rounded-lg text-base;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500;
+    min-height: 48px;
+  }
+  
+  .touch-button {
+    @apply px-6 py-4 rounded-lg font-semibold text-base transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+    @apply active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    min-height: 48px;
+    min-width: 120px;
+  }
+  
+  .touch-button-primary {
+    @apply touch-button bg-indigo-600 text-white hover:bg-indigo-700;
+  }
+  
+  .touch-button-secondary {
+    @apply touch-button border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50;
+  }
+  
+  /* Mobile-optimized cards */
+  .mobile-card {
+    @apply bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 m-2 sm:m-4;
+    @apply border border-gray-200;
+  }
+  
+  /* Swipeable cards */
+  .swipeable-card {
+    @apply mobile-card relative overflow-hidden;
+    touch-action: pan-x;
+    transition: transform 0.3s ease-out;
+  }
+  
+  .swipeable-card.swiping {
+    transition: none;
+  }
+  
+  .swipe-actions {
+    @apply absolute top-0 right-0 h-full flex items-center px-4 space-x-2;
+    background: linear-gradient(90deg, transparent, #ef4444);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+  }
+  
+  .swipeable-card.reveal-actions .swipe-actions {
+    transform: translateX(0);
+  }
+  
+  /* Scrollable tables */
+  .scrollable-table {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+  
+  .scrollable-table::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .scrollable-table::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+  
+  .scrollable-table::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  
+  .scrollable-table::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  
+  .mobile-table {
+    @apply min-w-full divide-y divide-gray-200;
+    min-width: 600px; /* Ensure horizontal scroll on small screens */
+  }
+  
+  .mobile-table th {
+    @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+    @apply bg-gray-50 sticky top-0 z-10;
+  }
+  
+  .mobile-table td {
+    @apply px-4 py-4 whitespace-nowrap text-sm text-gray-900;
+  }
+  
+  /* Responsive charts */
+  .responsive-chart {
+    @apply w-full h-64 sm:h-80 lg:h-96;
+    position: relative;
+  }
+  
+  .chart-container {
+    @apply w-full h-full relative overflow-hidden rounded-lg;
+  }
+  
+  .mobile-chart-bar {
+    @apply flex items-center mb-3 last:mb-0;
+    min-height: 40px;
+  }
+  
+  .chart-label {
+    @apply w-16 sm:w-20 text-xs sm:text-sm text-gray-600 flex-shrink-0;
+  }
+  
+  .chart-bar-container {
+    @apply flex-1 mx-2 sm:mx-4 relative;
+  }
+  
+  .chart-bar-bg {
+    @apply w-full h-6 sm:h-8 bg-gray-200 rounded-full relative overflow-hidden;
+  }
+  
+  .chart-bar-fill {
+    @apply h-full rounded-full flex items-center justify-center text-xs font-semibold text-white;
+    transition: width 0.8s ease-out;
+  }
+  
+  .chart-value {
+    @apply w-12 sm:w-16 text-xs sm:text-sm text-gray-600 text-right flex-shrink-0;
+  }
+  
+  /* Responsive text sizes */
+  .responsive-title {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-bold;
+  }
+  
+  .responsive-subtitle {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+  
+  .responsive-body {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  /* Card stack for mobile */
+  .card-stack {
+    @apply space-y-4;
+  }
+  
+  @media (min-width: 768px) {
+    .card-stack {
+      @apply grid grid-cols-2 gap-6 space-y-0;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .card-stack {
+      @apply grid-cols-3;
+    }
+  }
+  
+  /* Mobile-specific animations */
+  .slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+  
+  .slide-out-left {
+    animation: slideOutLeft 0.3s ease-out;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutLeft {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+  
+  /* Pull-to-refresh indicator */
+  .pull-refresh {
+    @apply flex items-center justify-center py-4 text-gray-500;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out;
+  }
+  
+  .pull-refresh.active {
+    transform: translateY(0);
+  }
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus indicators for keyboard navigation */
+.focus-visible:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Larger touch targets on mobile */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  
+  /* Mobile card adjustments */
+  .mobile-card {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  /* Compact mobile table */
+  .mobile-table th,
+  .mobile-table td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

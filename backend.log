@@ -1,0 +1,23 @@
+TrustEye Backend Server Starting...
+ * Serving Flask app 'backend'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 130-358-289
+127.0.0.1 - - [06/Oct/2025 20:14:39] "POST /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2025 20:15:49] "POST /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2025 20:17:01] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [06/Oct/2025 20:17:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+ * Detected change in '/Users/barmate_lakshya/Documents/SIH_NEW/app.py', reloading
+TrustEye Backend Server Starting...
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 130-358-289
+ * Detected change in '/Users/barmate_lakshya/Documents/SIH_NEW/server.py', reloading
+TrustEye Backend Server Starting...
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 130-358-289

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://cdnjs.cloudflare.com;">
+    <title>TrustEye — See Through Phishing</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F4F7FA',
+                        primary: '#1D4ED8',
+                        accent: '#059669',
+                        text: '#1F2937',
+                        secondary: '#6B7280',
+                        border: '#E5E7EB',
+                        error: '#DC2626'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(45deg, #1D4ED8, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-effect { backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .dark .glass-effect { background: rgba(31, 41, 55, 0.8); border: 1px solid rgba(75, 85, 99, 0.2); }
+        .hover-lift { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .professional-card { background: white; border: 1px solid #E5E7EB; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .dark .professional-card { background: #374151; border: 1px solid #4B5563; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Responsive Grid System */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
+        .col-12 { grid-column: span 12; }
+        .col-6 { grid-column: span 6; }
+        .col-4 { grid-column: span 4; }
+        .col-3 { grid-column: span 3; }
+        
+        .section-padding { padding: 3rem 0; }
+        .card-padding { padding: 2rem; }
+        
+        @media (max-width: 1024px) {
+            .container { padding: 0 1.5rem; }
+            .grid { gap: 1.25rem; }
+            .section-padding { padding: 2.5rem 0; }
+            .card-padding { padding: 1.5rem; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .grid { gap: 1rem; grid-template-columns: 1fr; }
+            .col-12, .col-6, .col-4, .col-3 { grid-column: span 1; }
+            .section-padding { padding: 2rem 0; }
+            .card-padding { padding: 1.25rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .container { padding: 0 0.75rem; }
+            .section-padding { padding: 1.5rem 0; }
+            .card-padding { padding: 1rem; }
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-gray-900 text-text dark:text-white transition-colors duration-300">
+    
+    <!-- Navigation -->
+    <nav class="glass-effect sticky top-0 z-50 border-b border-gray-200/50 dark:border-gray-700/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">TrustEye</span>
+                </div>
+
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" onclick="showSection('home')" class="nav-link active text-primary font-medium border-b-2 border-primary pb-1 cursor-pointer hover:text-primary transition-colors">Home</a>
+                    <a href="#scanner" onclick="showSection('scanner')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Scanner</a>
+                    <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Dashboard</a>
+                    <a href="#education" onclick="showSection('education')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Education</a>
+                    <a href="#contact" onclick="showSection('contact')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button id="mobileMenuBtn" class="lg:hidden p-3 rounded-xl bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-bars text-secondary"></i>
+                    </button>
+                    <button id="themeToggle" class="p-3 rounded-xl bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" title="Toggle Theme">
+                        <i class="fas fa-moon dark:hidden text-secondary"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <button id="langBtn" class="px-4 py-2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-xl font-medium transition-colors text-text">EN</button>
+                </div>
+            </div>
+
+            <div id="mobileMenu" class="hidden lg:hidden pb-4">
+                <div class="flex flex-col space-y-3 bg-white dark:bg-gray-800 rounded-2xl p-4 mt-4 shadow-lg">
+                    <a href="#home" onclick="showSection('home')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Home</a>
+                    <a href="#scanner" onclick="showSection('scanner')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Scanner</a>
+                    <a href="#dashboard" onclick="showSection('dashboard')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Dashboard</a>
+                    <a href="#education" onclick="showSection('education')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Education</a>
+                    <a href="#contact" onclick="showSection('contact')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Section -->
+        <section id="home" class="section-content">
+            <!-- Hero Section -->
+            <div class="section-padding text-center animate-fade-in">
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="mb-12">
+                            <div class="inline-block p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl mb-8 hover-lift">
+                                <i class="fas fa-shield-alt text-6xl gradient-text"></i>
+                            </div>
+                        </div>
+                        
+                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 gradient-text leading-tight">
+                            TrustEye — See Through Phishing
+                        </h1>
+                        
+                        <p class="text-lg md:text-xl lg:text-2xl text-secondary max-w-4xl mx-auto mb-12 leading-relaxed">
+                            Advanced AI protection with real-time threat detection, comprehensive education, and enterprise-grade security
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                            <button onclick="showSection('scanner')" class="px-8 md:px-12 py-4 md:py-5 bg-gradient-to-r from-primary to-accent text-white rounded-xl font-semibold text-lg md:text-xl shadow-lg hover-lift">
+                                <i class="fas fa-rocket mr-3"></i>Start Scanning
+                            </button>
+                            
+                            <button onclick="tryDemo()" class="px-8 md:px-12 py-4 md:py-5 border-2 border-primary text-primary rounded-xl font-semibold text-lg md:text-xl hover-lift hover:bg-primary hover:text-white transition-colors">
+                                <i class="fas fa-play mr-3"></i>Try Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="section-padding">
+                <div class="grid">
+                    <div class="col-12 text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text">Key Features</h2>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="professional-card card-padding rounded-2xl hover-lift h-full">
+                            <i class="fas fa-brain text-4xl md:text-5xl text-primary mb-6"></i>
+                            <h3 class="font-bold text-lg md:text-xl mb-4">AI Threat Scanner</h3>
+                            <p class="text-secondary leading-relaxed">Advanced ML algorithms for URL & text analysis with real-time detection</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="professional-card card-padding rounded-2xl hover-lift h-full">
+                            <i class="fas fa-chart-line text-4xl md:text-5xl text-accent mb-6"></i>
+                            <h3 class="font-bold text-lg md:text-xl mb-4">Live Dashboard</h3>
+                            <p class="text-secondary leading-relaxed">Real-time stats with interactive charts and animated updates</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="professional-card card-padding rounded-2xl hover-lift h-full">
+                            <i class="fas fa-graduation-cap text-4xl md:text-5xl text-purple-600 mb-6"></i>
+                            <h3 class="font-bold text-lg md:text-xl mb-4">Education Hub</h3>
+                            <p class="text-secondary leading-relaxed">Comprehensive learning with quizzes, case studies, and tips</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="professional-card card-padding rounded-2xl hover-lift h-full">
+                            <i class="fas fa-shield-alt text-4xl md:text-5xl text-indigo-600 mb-6"></i>
+                            <h3 class="font-bold text-lg md:text-xl mb-4">Enterprise Security</h3>
+                            <p class="text-secondary leading-relaxed">XSS protection, input validation, and secure data handling</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="section-padding">
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="professional-card rounded-2xl card-padding">
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12 gradient-text">Real-World Impact</h2>
+                            <div class="grid">
+                                <div class="col-12 col-md-4 text-center">
+                                    <div class="text-4xl md:text-6xl font-bold gradient-text mb-4" id="threatsBlocked">50M+</div>
+                                    <p class="text-base md:text-lg text-secondary font-medium">Threats Blocked</p>
+                                </div>
+                                <div class="col-12 col-md-4 text-center">
+                                    <div class="text-4xl md:text-6xl font-bold gradient-text mb-4" id="accuracyRate">99.8%</div>
+                                    <p class="text-base md:text-lg text-secondary font-medium">Detection Accuracy</p>
+                                </div>
+                                <div class="col-12 col-md-4 text-center">
+                                    <div class="text-4xl md:text-6xl font-bold gradient-text mb-4" id="protectedUsers">2.1M+</div>
+                                    <p class="text-base md:text-lg text-secondary font-medium">Protected Users</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scanner Section -->
+        <section id="scanner" class="section-content hidden">
+            <div class="section-padding">
+                <div class="grid">
+                    <div class="col-12 text-center mb-12">
+                        <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">AI Threat Scanner</h2>
+                        <p class="text-lg text-secondary">Advanced machine learning for real-time phishing detection</p>
+                    </div>
+                    
+                    <!-- Scanner Interface -->
+                    <div class="col-12">
+                        <div class="professional-card rounded-2xl card-padding">
+                            <!-- Scanner Tabs -->
+                            <div class="flex justify-center mb-8">
+                                <div class="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+                                    <button onclick="switchScannerTab('url')" id="urlScanTab" class="px-6 py-3 rounded-lg bg-primary text-white font-medium transition-all">
+                                        <i class="fas fa-link mr-2"></i>URL Scanner
+                                    </button>
+                                    <button onclick="switchScannerTab('text')" id="textScanTab" class="px-6 py-3 rounded-lg font-medium text-secondary hover:text-primary transition-all">
+                                        <i class="fas fa-file-text mr-2"></i>Text Analysis
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- URL Scanner -->
+                            <div id="urlScanner" class="scanner-tab">
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Enter URL to scan:</label>
+                                    <input type="url" id="urlInput" class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:outline-none text-lg bg-white dark:bg-gray-700" placeholder="https://example.com">
+                                </div>
+                                
+                                <!-- Sample URLs -->
+                                <div class="mb-6">
+                                    <p class="text-sm font-medium mb-3">Try these samples:</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                        <button onclick="loadSample('url', 'http://bit.ly/phishing-bank')" class="text-left p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded text-sm hover:bg-red-100 dark:hover:bg-red-900/30">🚨 Phishing Bank</button>
+                                        <button onclick="loadSample('url', 'https://secure-paypal-verify.tk')" class="text-left p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded text-sm hover:bg-red-100 dark:hover:bg-red-900/30">🚨 Fake PayPal</button>
+                                        <button onclick="loadSample('url', 'https://amazon-security.ml')" class="text-left p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded text-sm hover:bg-red-100 dark:hover:bg-red-900/30">🚨 Fake Amazon</button>
+                                        <button onclick="loadSample('url', 'https://google.com')" class="text-left p-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded text-sm hover:bg-green-100 dark:hover:bg-green-900/30">✅ Legitimate Site</button>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="scanUrl()" id="scanUrlBtn" class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-xl font-semibold text-lg hover-lift">
+                                    <i class="fas fa-search mr-3"></i>Scan URL
+                                </button>
+                            </div>
+
+                            <!-- Text Scanner -->
+                            <div id="textScanner" class="scanner-tab hidden">
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Enter text to analyze:</label>
+                                    <textarea id="textInput" rows="6" class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary focus:outline-none text-lg bg-white dark:bg-gray-700 resize-none" placeholder="Paste suspicious email or message content here..."></textarea>
+                                </div>
+                                
+                                <!-- Sample Texts -->
+                                <div class="mb-6">
+                                    <p class="text-sm font-medium mb-3">Try these samples:</p>
+                                    <div class="grid grid-cols-1 gap-2">
+                                        <button onclick="loadSample('text', 'URGENT: Your account will be suspended in 24 hours. Click here immediately to verify your identity and prevent closure.')" class="text-left p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded text-sm hover:bg-red-100 dark:hover:bg-red-900/30">🚨 Account Suspension Threat</button>
+                                        <button onclick="loadSample('text', 'Congratulations! You have won $1,000,000 in our lottery. Send your bank details to claim your prize now!')" class="text-left p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded text-sm hover:bg-red-100 dark:hover:bg-red-900/30">🚨 Lottery Scam</button>
+                                        <button onclick="loadSample('text', 'Your order #12345 has been shipped and will arrive tomorrow. Track your package using the link below.')" class="text-left p-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded text-sm hover:bg-green-100 dark:hover:bg-green-900/30">✅ Legitimate Notification</button>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="scanText()" id="scanTextBtn" class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-xl font-semibold text-lg hover-lift">
+                                    <i class="fas fa-search mr-3"></i>Analyze Text
+                                </button>
+                            </div>
+
+                            <!-- Results -->
+                            <div id="scanResults" class="mt-8 hidden">
+                                <div id="resultContent" class="p-6 rounded-xl"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

@@ -1,0 +1,52 @@
+[
+  {
+    "url": "http://paypal-security.verify-account.com/login",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "https://bit.ly/3xYz9Ab",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "http://192.168.1.100/banking/login.php",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "https://www.google.com",
+    "label": 0,
+    "type": "url"
+  },
+  {
+    "url": "https://github.com/user/repo",
+    "label": 0,
+    "type": "url"
+  },
+  {
+    "url": "http://amazon-security-update.net/verify",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "https://www.netflix.com/browse",
+    "label": 0,
+    "type": "url"
+  },
+  {
+    "url": "http://tinyurl.com/bank-verify",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "https://microsoft-support.secure-login.net",
+    "label": 1,
+    "type": "url"
+  },
+  {
+    "url": "https://stackoverflow.com/questions",
+    "label": 0,
+    "type": "url"
+  }
+]

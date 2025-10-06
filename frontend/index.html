@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Detector MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🛡️ Phishing Detector</h1>
+            <p class="text-gray-600">AI-powered protection against phishing attacks</p>
+        </div>
+
+        <!-- Text Analysis -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">📝 Text Analysis</h2>
+            <textarea id="textInput" class="w-full p-3 border rounded-lg h-32 mb-4" 
+                placeholder="Paste suspicious email or message content here..."></textarea>
+            <button onclick="analyzeText()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
+                Analyze Text
+            </button>
+            <div id="textResult" class="mt-4"></div>
+        </div>
+
+        <!-- URL Analysis -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">🔗 URL Analysis</h2>
+            <input type="url" id="urlInput" class="w-full p-3 border rounded-lg mb-4" 
+                placeholder="Enter suspicious URL here...">
+            <button onclick="analyzeUrl()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+                Analyze URL
+            </button>
+            <div id="urlResult" class="mt-4"></div>
+        </div>
+
+        <!-- Full Scan -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">🔍 Full Scan</h2>
+            <button onclick="fullScan()" class="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600">
+                Scan Both Text & URL
+            </button>
+            <div id="fullResult" class="mt-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        async function analyzeText() {
+            const text = document.getElementById('textInput').value;
+            if (!text) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/analyze-text`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({text: text})
+                });
+                
+                const result = await response.json();
+                displayResult('textResult', result.analysis);
+            } catch (error) {
+                document.getElementById('textResult').innerHTML = 
+                    '<div class="bg-red-100 text-red-700 p-3 rounded">Error: API unavailable</div>';
+            }
+        }
+
+        async function analyzeUrl() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/analyze-url`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url})
+                });
+                
+                const result = await response.json();
+                displayResult('urlResult', result.analysis);
+            } catch (error) {
+                document.getElementById('urlResult').innerHTML = 
+                    '<div class="bg-red-100 text-red-700 p-3 rounded">Error: API unavailable</div>';
+            }
+        }
+
+        async function fullScan() {
+            const text = document.getElementById('textInput').value;
+            const url = document.getElementById('urlInput').value;
+
+            try {
+                const response = await fetch(`${API_URL}/api/full-scan?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                displayFullResult(result);
+            } catch (error) {
+                document.getElementById('fullResult').innerHTML = 
+                    '<div class="bg-red-100 text-red-700 p-3 rounded">Error: API unavailable</div>';
+            }
+        }
+
+        function displayResult(elementId, analysis) {
+            const isRisky = analysis.is_phishing || analysis.is_suspicious;
+            const confidence = (analysis.confidence * 100).toFixed(1);
+            
+            const resultClass = isRisky ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+            const icon = isRisky ? '⚠️' : '✅';
+            const status = isRisky ? 'SUSPICIOUS' : 'SAFE';
+            
+            document.getElementById(elementId).innerHTML = `
+                <div class="${resultClass} p-4 rounded-lg">
+                    <div class="font-semibold">${icon} ${status} (${confidence}% confidence)</div>
+                    <div class="mt-2 text-sm">
+                        ${JSON.stringify(analysis.indicators, null, 2)}
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayFullResult(result) {
+            const overallClass = result.overall_risk ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+            const icon = result.overall_risk ? '🚨' : '✅';
+            const status = result.overall_risk ? 'THREAT DETECTED' : 'ALL CLEAR';
+            
+            document.getElementById('fullResult').innerHTML = `
+                <div class="${overallClass} p-4 rounded-lg">
+                    <div class="font-semibold text-lg">${icon} ${status}</div>
+                    <pre class="mt-2 text-sm overflow-auto">${JSON.stringify(result.detailed_analysis, null, 2)}</pre>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

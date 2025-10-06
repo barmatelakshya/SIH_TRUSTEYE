@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustEye — See Through Phishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F4F7FA',
+                        primary: '#1D4ED8',
+                        accent: '#059669',
+                        text: '#1F2937',
+                        secondary: '#6B7280',
+                        border: '#E5E7EB',
+                        error: '#DC2626'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(45deg, #1D4ED8, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8); }
+        .hover-lift { transition: all 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .futuristic-border { border: 2px solid transparent; background: linear-gradient(white, white) padding-box, linear-gradient(45deg, #1D4ED8, #059669) border-box; }
+    </style>
+</head>
+<body class="bg-background text-text">
+    
+    <nav class="glass-effect sticky top-0 z-50 border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">TrustEye</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a onclick="showPage('home')" class="nav-link active text-primary font-medium border-b-2 border-primary pb-1 cursor-pointer">Home</a>
+                    <a onclick="showPage('demo')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Try Demo</a>
+                    <a onclick="showPage('email-dashboard')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Email Dashboard</a>
+                    <a onclick="showPage('sample-email')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Sample Email</a>
+                    <a onclick="showPage('threat-detection')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Threat Detection</a>
+                    <a onclick="showPage('security-dashboard')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Security Dashboard</a>
+                    <a onclick="showPage('education')" class="nav-link text-secondary hover:text-primary transition-colors cursor-pointer">Educational Content</a>
+                </div>
+
+                <!-- Mobile Menu Button & Accessibility -->
+                <div class="flex items-center space-x-4">
+                    <button id="mobileMenuBtn" class="lg:hidden p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-all">
+                        <i class="fas fa-bars text-secondary"></i>
+                    </button>
+                    <button id="contrastBtn" class="p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-all shadow-sm" title="High Contrast">
+                        <i class="fas fa-adjust text-secondary"></i>
+                    </button>
+                    <button id="langBtn" class="px-4 py-2 bg-white/50 hover:bg-white/80 rounded-xl font-medium transition-all shadow-sm text-text">EN</button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden lg:hidden pb-4">
+                <div class="flex flex-col space-y-3">
+                    <a onclick="showPage('home')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Home</a>
+                    <a onclick="showPage('demo')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Try Demo</a>
+                    <a onclick="showPage('email-dashboard')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Email Dashboard</a>
+                    <a onclick="showPage('sample-email')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Sample Email</a>
+                    <a onclick="showPage('threat-detection')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Threat Detection</a>
+                    <a onclick="showPage('security-dashboard')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Security Dashboard</a>
+                    <a onclick="showPage('education')" class="mobile-nav-link text-secondary hover:text-primary transition-colors py-2 cursor-pointer">Educational Content</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Home Page -->
+        <div id="home-page" class="page-content">
+            <section class="text-center mb-20">
+                <h1 class="text-6xl font-bold mb-8 gradient-text">TrustEye — See Through Phishing</h1>
+                <p class="text-2xl text-secondary max-w-4xl mx-auto mb-12">Advanced AI protection with accessibility-first design</p>
+                <button onclick="showPage('demo')" class="px-10 py-5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl font-semibold text-xl shadow-2xl hover-lift">
+                    <i class="fas fa-rocket mr-3"></i>Start Scanning
+                </button>
+            </section>
+        </div>
+
+        <!-- Demo Page -->
+        <div id="demo-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">AI Security Scanner</h2>
+            <div class="bg-white rounded-3xl shadow-2xl p-10 futuristic-border">
+                <textarea class="w-full h-48 p-6 border-2 border-border rounded-2xl focus:border-primary focus:outline-none text-lg" placeholder="Enter suspicious text to analyze..."></textarea>
+                <button class="mt-6 px-10 py-4 bg-primary text-white rounded-2xl font-semibold text-lg hover-lift">
+                    <i class="fas fa-search mr-3"></i>Analyze Text
+                </button>
+            </div>
+        </div>
+
+        <!-- Email Dashboard Page -->
+        <div id="email-dashboard-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">Email Dashboard</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-lg futuristic-border">
+                    <h3 class="text-2xl font-bold text-primary mb-2">247</h3>
+                    <p class="text-secondary">Emails Scanned Today</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg futuristic-border">
+                    <h3 class="text-2xl font-bold text-error mb-2">12</h3>
+                    <p class="text-secondary">Threats Blocked</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg futuristic-border">
+                    <h3 class="text-2xl font-bold text-accent mb-2">98.7%</h3>
+                    <p class="text-secondary">Detection Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Email Page -->
+        <div id="sample-email-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">Sample Email Analysis</h2>
+            <div class="bg-white rounded-3xl shadow-xl p-8 futuristic-border">
+                <div class="bg-red-50 border-2 border-error rounded-2xl p-6 mb-6">
+                    <h3 class="text-xl font-bold text-error mb-4">⚠️ Phishing Email Example</h3>
+                    <div class="bg-white p-4 rounded-lg border">
+                        <p><strong>From:</strong> security@bank-alert.com</p>
+                        <p><strong>Subject:</strong> URGENT: Your account will be suspended</p>
+                        <p class="mt-4">Dear Customer,<br><br>Your account has been flagged for suspicious activity. Click here immediately to verify your identity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Detection Page -->
+        <div id="threat-detection-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">Threat Detection</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-3xl shadow-xl p-8 futuristic-border">
+                    <h3 class="text-2xl font-bold mb-6 text-text">Detection Methods</h3>
+                    <ul class="space-y-4 text-secondary">
+                        <li class="flex items-center"><i class="fas fa-brain text-primary mr-3"></i>Natural Language Processing</li>
+                        <li class="flex items-center"><i class="fas fa-link text-primary mr-3"></i>URL Pattern Analysis</li>
+                        <li class="flex items-center"><i class="fas fa-shield-alt text-primary mr-3"></i>Domain Reputation Check</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-3xl shadow-xl p-8 futuristic-border">
+                    <h3 class="text-2xl font-bold mb-6 text-text">Threat Categories</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-error font-medium">Phishing</span>
+                            <span class="text-error">High Risk</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                            <span class="text-yellow-700 font-medium">Spam</span>
+                            <span class="text-yellow-700">Medium Risk</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Dashboard Page -->
+        <div id="security-dashboard-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">Security Dashboard</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl shadow-lg p-6 futuristic-border">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-secondary text-sm">Total Scans</p>
+                            <p class="text-3xl font-bold text-primary">1,247</p>
+                        </div>
+                        <i class="fas fa-search text-primary text-2xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 futuristic-border">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-secondary text-sm">Threats Blocked</p>
+                            <p class="text-3xl font-bold text-error">89</p>
+                        </div>
+                        <i class="fas fa-shield-alt text-error text-2xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 futuristic-border">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-secondary text-sm">Success Rate</p>
+                            <p class="text-3xl font-bold text-accent">99.2%</p>
+                        </div>
+                        <i class="fas fa-check-circle text-accent text-2xl"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg p-6 futuristic-border">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-secondary text-sm">Active Users</p>
+                            <p class="text-3xl font-bold text-purple-600">2.1M</p>
+                        </div>
+                        <i class="fas fa-users text-purple-600 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Content Page -->
+        <div id="education-page" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-10 gradient-text">Educational Content</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-3xl shadow-xl p-8 futuristic-border">
+                    <h3 class="text-2xl font-bold mb-6 text-error"><i class="fas fa-exclamation-triangle mr-3"></i>Common Phishing Signs</h3>
+                    <ul class="space-y-3 text-secondary">
+                        <li class="flex items-start"><span class="text-error mr-2">•</span>Urgent action required messages</li>
+                        <li class="flex items-start"><span class="text-error mr-2">•</span>Requests to verify account immediately</li>
+                        <li class="flex items-start"><span class="text-error mr-2">•</span>Suspicious sender addresses</li>
+                        <li class="flex items-start"><span class="text-error mr-2">•</span>Generic greetings like "Dear Customer"</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-3xl shadow-xl p-8 futuristic-border">
+                    <h3 class="text-2xl font-bold mb-6 text-accent"><i class="fas fa-shield-alt mr-3"></i>Protection Tips</h3>
+                    <ul class="space-y-3 text-secondary">
+                        <li class="flex items-start"><span class="text-accent mr-2">•</span>Always verify sender identity</li>
+                        <li class="flex items-start"><span class="text-accent mr-2">•</span>Check URLs before clicking</li>
+                        <li class="flex items-start"><span class="text-accent mr-2">•</span>Use two-factor authentication</li>
+                        <li class="flex items-start"><span class="text-accent mr-2">•</span>Keep software updated</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentPage = 'home';
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.remove('hidden');
+            
+            // Update navigation active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                link.classList.add('text-secondary');
+            });
+            
+            // Set active link
+            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (activeLink && activeLink.classList.contains('nav-link')) {
+                activeLink.classList.add('active', 'text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                activeLink.classList.remove('text-secondary');
+            }
+            
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.add('hidden');
+            
+            currentPage = pageId;
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Accessibility controls
+        let highContrast = false;
+        let currentLang = 'en';
+
+        function toggleContrast() {
+            highContrast = !highContrast;
+            document.body.style.filter = highContrast ? 'contrast(150%)' : '';
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            document.getElementById('langBtn').textContent = currentLang.toUpperCase();
+        }
+
+        document.getElementById('contrastBtn').addEventListener('click', toggleContrast);
+        document.getElementById('langBtn').addEventListener('click', toggleLanguage);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 TrustEye Navigation System Ready');
+        });
+    </script>
+</body>
+</html>

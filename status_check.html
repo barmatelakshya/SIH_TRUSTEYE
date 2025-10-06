@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustEye Status Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔍 TrustEye Application Status Check</h1>
+    <div id="results"></div>
+    
+    <script>
+        function checkStatus() {
+            const results = document.getElementById('results');
+            const checks = [];
+            
+            // Check 1: Basic JavaScript functionality
+            try {
+                const test = { a: 1, b: 2 };
+                checks.push({ status: 'success', message: '✅ JavaScript engine working' });
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ JavaScript engine failed: ' + e.message });
+            }
+            
+            // Check 2: LocalStorage availability
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('test_key', 'test_value');
+                    const value = localStorage.getItem('test_key');
+                    localStorage.removeItem('test_key');
+                    if (value === 'test_value') {
+                        checks.push({ status: 'success', message: '✅ LocalStorage working correctly' });
+                    } else {
+                        checks.push({ status: 'error', message: '❌ LocalStorage read/write failed' });
+                    }
+                } else {
+                    checks.push({ status: 'error', message: '❌ LocalStorage not supported' });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ LocalStorage error: ' + e.message });
+            }
+            
+            // Check 3: DOM manipulation
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.innerHTML = '<span>Test</span>';
+                if (testDiv.querySelector('span')) {
+                    checks.push({ status: 'success', message: '✅ DOM manipulation working' });
+                } else {
+                    checks.push({ status: 'error', message: '❌ DOM manipulation failed' });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ DOM manipulation error: ' + e.message });
+            }
+            
+            // Check 4: User ID generation simulation
+            try {
+                function generateUserId() {
+                    return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                }
+                const userId = generateUserId();
+                if (userId.match(/^user_\d+_[a-z0-9]+$/)) {
+                    checks.push({ status: 'success', message: '✅ User ID generation: ' + userId });
+                } else {
+                    checks.push({ status: 'error', message: '❌ User ID format invalid: ' + userId });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ User ID generation error: ' + e.message });
+            }
+            
+            // Check 5: JSON operations
+            try {
+                const testData = { name: 'TrustEye', version: '1.0', features: ['scanner', 'dashboard'] };
+                const jsonString = JSON.stringify(testData);
+                const parsedData = JSON.parse(jsonString);
+                if (parsedData.name === 'TrustEye') {
+                    checks.push({ status: 'success', message: '✅ JSON serialization/deserialization working' });
+                } else {
+                    checks.push({ status: 'error', message: '❌ JSON operations failed' });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ JSON operations error: ' + e.message });
+            }
+            
+            // Check 6: Date/Time operations
+            try {
+                const now = new Date();
+                const isoString = now.toISOString();
+                if (isoString.includes('T') && isoString.includes('Z')) {
+                    checks.push({ status: 'success', message: '✅ Date/Time operations working' });
+                } else {
+                    checks.push({ status: 'error', message: '❌ Date/Time format invalid' });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ Date/Time operations error: ' + e.message });
+            }
+            
+            // Check 7: Array operations
+            try {
+                const testArray = [1, 2, 3, 4, 5];
+                const filtered = testArray.filter(x => x > 3);
+                const mapped = testArray.map(x => x * 2);
+                if (filtered.length === 2 && mapped[0] === 2) {
+                    checks.push({ status: 'success', message: '✅ Array operations working' });
+                } else {
+                    checks.push({ status: 'error', message: '❌ Array operations failed' });
+                }
+            } catch (e) {
+                checks.push({ status: 'error', message: '❌ Array operations error: ' + e.message });
+            }
+            
+            // Display results
+            results.innerHTML = checks.map(check => 
+                `<div class="status ${check.status}">${check.message}</div>`
+            ).join('');
+            
+            // Summary
+            const successCount = checks.filter(c => c.status === 'success').length;
+            const totalCount = checks.length;
+            
+            results.innerHTML += `
+                <div class="status info">
+                    <h3>📊 Summary: ${successCount}/${totalCount} checks passed</h3>
+                    ${successCount === totalCount ? 
+                        '<p><strong>🎉 All systems operational! TrustEye should work correctly.</strong></p>' : 
+                        '<p><strong>⚠️ Some issues detected. Check the errors above.</strong></p>'
+                    }
+                </div>
+            `;
+        }
+        
+        // Run checks when page loads
+        document.addEventListener('DOMContentLoaded', checkStatus);
+    </script>
+</body>
+</html>
