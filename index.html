@@ -1149,7 +1149,8 @@
     </main>
 
     <script>
-let dashboardData = JSON.parse(localStorage.getItem('trusteyeData')) || {
+// Initialize dashboard data - starts from 0 for new users
+let dashboardData = {
     totalScans: 0,
     threatsBlocked: 0,
     successRate: 0,
@@ -1211,7 +1212,7 @@ function initializeUserData() {
         userId = generateUserId();
         localStorage.setItem('trusteye_user_id', userId);
         
-        // Create new user data structure
+        // Create fresh user data structure starting from 0
         const userData = {
             id: userId,
             createdAt: new Date().toISOString(),
@@ -1222,11 +1223,21 @@ function initializeUserData() {
                 threatsBlocked: 0,
                 scansPerformed: 0,
                 lastScanDate: null,
-                riskLevel: 'Low'
+                riskLevel: 'Low',
+                successRate: 0
             }
         };
         
         localStorage.setItem('trusteye_user_data', JSON.stringify(userData));
+        
+        // Reset legacy dashboard data for new users
+        dashboardData = {
+            totalScans: 0,
+            threatsBlocked: 0,
+            successRate: 0,
+            scanHistory: []
+        };
+        localStorage.setItem('trusteyeData', JSON.stringify(dashboardData));
     }
     
     return userId;
@@ -1248,14 +1259,26 @@ function updateUserData(updates) {
 function addScanToHistory(scanData) {
     const userData = getUserData();
     if (userData) {
-        userData.scans.push({
+        userData.scans.unshift({
             ...scanData,
             timestamp: new Date().toISOString(),
             id: Date.now()
         });
+        
         userData.dashboardData.scansPerformed++;
         userData.dashboardData.lastScanDate = new Date().toISOString();
-        if (scanData.threat) userData.dashboardData.threatsBlocked++;
+        if (scanData.threat || scanData.isPhishing) {
+            userData.dashboardData.threatsBlocked++;
+        }
+        
+        // Calculate success rate (percentage of threats detected)
+        userData.dashboardData.successRate = userData.dashboardData.scansPerformed > 0 ? 
+            Math.round((userData.dashboardData.threatsBlocked / userData.dashboardData.scansPerformed) * 100) : 0;
+        
+        // Keep only last 50 scans
+        if (userData.scans.length > 50) {
+            userData.scans = userData.scans.slice(0, 50);
+        }
         
         localStorage.setItem('trusteye_user_data', JSON.stringify(userData));
         updateDashboard();
@@ -1610,16 +1633,65 @@ function saveScanResult(result) {
 }
 
 function updateDashboard() {
-    document.getElementById('dashTotalScans').textContent = dashboardData.totalScans.toLocaleString();
-    document.getElementById('dashThreatsBlocked').textContent = dashboardData.threatsBlocked.toLocaleString();
-    document.getElementById('dashSuccessRate').textContent = dashboardData.successRate + '%';
+    const userData = getUserData();
     
-    const lastScan = dashboardData.scanHistory[0];
-    document.getElementById('dashLastScan').textContent = lastScan ? 
-        new Date(lastScan.timestamp).toLocaleTimeString() : 'Never';
+    if (userData) {
+        // Use user-specific data
+        document.getElementById('dashTotalScans').textContent = userData.dashboardData.scansPerformed.toLocaleString();
+        document.getElementById('dashThreatsBlocked').textContent = userData.dashboardData.threatsBlocked.toLocaleString();
+        document.getElementById('dashSuccessRate').textContent = userData.dashboardData.successRate + '%';
+        
+        const lastScan = userData.scans[0];
+        document.getElementById('dashLastScan').textContent = lastScan ? 
+            new Date(lastScan.timestamp).toLocaleTimeString() : 'Never';
+        
+        // Update scan history table with user data
+        updateScanHistoryTableFromUserData(userData.scans);
+    } else {
+        // Fallback to legacy data
+        document.getElementById('dashTotalScans').textContent = dashboardData.totalScans.toLocaleString();
+        document.getElementById('dashThreatsBlocked').textContent = dashboardData.threatsBlocked.toLocaleString();
+        document.getElementById('dashSuccessRate').textContent = dashboardData.successRate + '%';
+        
+        const lastScan = dashboardData.scanHistory[0];
+        document.getElementById('dashLastScan').textContent = lastScan ? 
+            new Date(lastScan.timestamp).toLocaleTimeString() : 'Never';
+        
+        updateScanHistoryTable();
+    }
     
-    updateScanHistoryTable();
     updateCharts();
+}
+
+function updateScanHistoryTableFromUserData(scans) {
+    const tbody = document.getElementById('scanHistoryTable');
+    
+    if (scans.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-secondary">No scans yet. Try the scanner to see results here.</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = scans.slice(0, 10).map(scan => `
+        <tr class="border-b border-gray-100 dark:border-gray-700">
+            <td class="py-3 px-4">${new Date(scan.timestamp).toLocaleTimeString()}</td>
+            <td class="py-3 px-4">${scan.type}</td>
+            <td class="py-3 px-4 max-w-xs truncate">${scan.content}</td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-1 rounded text-xs ${scan.threat ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                    ${scan.threat ? 'Threat' : 'Safe'}
+                </span>
+            </td>
+            <td class="py-3 px-4">
+                <span class="px-2 py-1 rounded text-xs ${
+                    scan.riskLevel === 'High' ? 'bg-red-100 text-red-800' :
+                    scan.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-green-100 text-green-800'
+                }">
+                    ${scan.riskLevel || 'Low'}
+                </span>
+            </td>
+        </tr>
+    `).join('');
 }
 
 function updateScanHistoryTable() {
