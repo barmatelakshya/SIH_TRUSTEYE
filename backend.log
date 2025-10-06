@@ -21,3 +21,6 @@ TrustEye Backend Server Starting...
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 130-358-289
+TrustEye Backend Server Starting...
+/opt/homebrew/Cellar/python@3.13/3.13.7/Frameworks/Python.framework/Versions/3.13/lib/python3.13/multiprocessing/resource_tracker.py:324: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-mn2i96n1'}
+  warnings.warn(
