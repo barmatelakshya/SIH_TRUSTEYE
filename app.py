@@ -23,11 +23,15 @@ SUSPICIOUS_DOMAINS = ['bit.ly', 'tinyurl.com', 'short.link', 'suspicious-bank.co
 # Frontend routes
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory('dist', 'index.html')
+
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    return send_from_directory('dist/assets', filename)
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('.', filename)
+    return send_from_directory('dist', filename)
 
 # API routes
 @app.route('/api/scan/text', methods=['POST'])
