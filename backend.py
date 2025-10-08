@@ -4,9 +4,31 @@ import re
 import urllib.parse
 import requests
 from datetime import datetime
+import json
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+# Simple file-based storage for user data
+USER_DATA_FILE = 'user_data.json'
+
+def load_user_data():
+    if os.path.exists(USER_DATA_FILE):
+        try:
+            with open(USER_DATA_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_user_data(data):
+    try:
+        with open(USER_DATA_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+        return True
+    except:
+        return False
 
 # Phishing detection patterns
 PHISHING_PATTERNS = [
@@ -108,6 +130,49 @@ def scan_email():
         'warnings': warnings,
         'risk_level': 'High' if threat_score > 50 else 'Medium' if threat_score > 25 else 'Low'
     })
+
+@app.route('/api/user/save', methods=['POST'])
+def save_user_session():
+    try:
+        data = request.json
+        user_id = data.get('user_id', 'default_user')
+        
+        all_data = load_user_data()
+        all_data[user_id] = {
+            'totalScans': data.get('totalScans', 0),
+            'threatsFound': data.get('threatsFound', 0),
+            'safeMessages': data.get('safeMessages', 0),
+            'scanHistory': data.get('scanHistory', []),
+            'lastActive': datetime.now().isoformat()
+        }
+        
+        if save_user_data(all_data):
+            return jsonify({'success': True, 'message': 'Data saved successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to save data'}), 500
+            
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+@app.route('/api/user/load', methods=['POST'])
+def load_user_session():
+    try:
+        data = request.json
+        user_id = data.get('user_id', 'default_user')
+        
+        all_data = load_user_data()
+        user_data = all_data.get(user_id, {
+            'totalScans': 0,
+            'threatsFound': 0,
+            'safeMessages': 0,
+            'scanHistory': [],
+            'lastActive': datetime.now().isoformat()
+        })
+        
+        return jsonify({'success': True, 'data': user_data})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
     print("TrustEye Backend Server Starting...")
