@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/barmate_lakshya/Documents/SIH_NEW/backend.py", line 5, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
