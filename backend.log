@@ -16,3 +16,6 @@ TrustEye Backend Server Starting...
 127.0.0.1 - - [09/Oct/2025 18:45:23] "POST /api/scan/text HTTP/1.1" 200 -
 127.0.0.1 - - [09/Oct/2025 18:45:28] "OPTIONS /api/scan/url HTTP/1.1" 200 -
 127.0.0.1 - - [09/Oct/2025 18:45:28] "POST /api/scan/url HTTP/1.1" 200 -
+ * Detected change in '/Users/barmate_lakshya/Documents/SIH_NEW/backend.py', reloading
+TrustEye Backend Server Starting...
+ * Restarting with stat

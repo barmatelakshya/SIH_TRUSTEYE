@@ -1,7 +1,7 @@
 import { analyzeText, analyzeURL } from '../utils/scamDetection';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-url.herokuapp.com/api'  // Replace with your deployed backend URL
+  ? 'https://sih-trusteye-backend.onrender.com/api'  // Will deploy backend here
   : 'http://localhost:5001/api';
 
 interface BackendAnalysisResult {
@@ -85,12 +85,6 @@ function convertBackendResponse(backendResult: BackendAnalysisResult): FrontendA
 }
 
 export async function analyzeTextWithBackend(text: string): Promise<FrontendAnalysisResult> {
-  // For GitHub Pages deployment, use client-side analysis only
-  if (process.env.NODE_ENV === 'production') {
-    console.log('Production mode: Using client-side analysis');
-    return analyzeText(text);
-  }
-  
   try {
     const response = await fetch(`${API_BASE_URL}/scan/text`, {
       method: 'POST',
@@ -114,12 +108,6 @@ export async function analyzeTextWithBackend(text: string): Promise<FrontendAnal
 }
 
 export async function analyzeURLWithBackend(url: string): Promise<FrontendAnalysisResult> {
-  // For GitHub Pages deployment, use client-side analysis only
-  if (process.env.NODE_ENV === 'production') {
-    console.log('Production mode: Using client-side analysis');
-    return analyzeURL(url);
-  }
-  
   try {
     const response = await fetch(`${API_BASE_URL}/scan/url`, {
       method: 'POST',
