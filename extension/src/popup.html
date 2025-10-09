@@ -1,440 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
     <style>
-        * { box-sizing: border-box; }
         body { 
-            width: 100%;
-            max-width: 360px;
-            min-width: 280px;
-            padding: 20px; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            width: 350px; 
+            height: 400px;
+            padding: 15px; 
+            font-family: Arial, sans-serif; 
             margin: 0;
-            font-size: 16px;
-            line-height: 1.5;
         }
         .header { 
             text-align: center; 
-            margin-bottom: 24px; 
-            padding-bottom: 16px;
-            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 15px; 
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4f46e5;
-            margin-bottom: 8px;
+        .logo { 
+            font-size: 18px; 
+            font-weight: bold; 
+            color: #4f46e5; 
+            margin-bottom: 5px;
         }
-        .subtitle {
+        textarea { 
+            width: 100%; 
+            height: 100px; 
+            margin: 10px 0; 
+            padding: 8px; 
+            border: 2px solid #ddd; 
+            border-radius: 4px;
             font-size: 14px;
-            color: #6b7280;
+            resize: none;
+            box-sizing: border-box;
         }
-        .status { 
-            padding: 20px; 
-            border-radius: 12px; 
-            margin: 20px 0; 
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #4f46e5; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 60px;
+            font-weight: bold;
+        }
+        button:hover { 
+            background: #3730a3; 
+        }
+        .result { 
+            margin-top: 15px; 
+            padding: 12px; 
+            border-radius: 4px; 
+            font-weight: bold;
+            display: none;
         }
         .safe { 
             background: #dcfce7; 
             color: #166534; 
             border: 2px solid #bbf7d0;
         }
-        .warning { 
-            background: #fef3c7; 
-            color: #92400e; 
-            border: 2px solid #fde68a;
-        }
         .danger { 
-            background: #fee2e2; 
-            color: #991b1b; 
-            border: 2px solid #fecaca;
-        }
-        .status-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        .status-text {
-            flex: 1;
-        }
-        .status-title {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .status-desc {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        .btn { 
-            width: 100%; 
-            padding: 16px 20px; 
-            margin: 12px 0; 
-            border: none; 
-            border-radius: 12px; 
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.2s;
-            min-height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-primary { 
-            background: #4f46e5; 
-            color: white; 
-        }
-        .btn-primary:hover, .btn-primary:active { 
-            background: #4338ca; 
-            transform: scale(0.98);
-        }
-        .btn-secondary { 
-            background: #f3f4f6; 
-            color: #374151; 
-            border: 2px solid #d1d5db;
-        }
-        .btn-secondary:hover, .btn-secondary:active { 
-            background: #e5e7eb; 
-            transform: scale(0.98);
-        }
-        .stats {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 20px 0;
-        }
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            background: #f9fafb;
-            border-radius: 12px;
-            border: 2px solid #e5e7eb;
-            min-height: 56px;
-        }
-        .stat-label {
-            font-size: 16px;
-            color: #374151;
-            font-weight: 500;
-        }
-        .stat-number {
-            font-size: 20px;
-            font-weight: bold;
-            color: #4f46e5;
-        }
-        .toggle-section {
-            border-top: 2px solid #e5e7eb; 
-            margin: 24px 0 0 0; 
-            padding-top: 20px;
-        }
-        .toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 0;
-            font-size: 16px;
-            min-height: 56px;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        .toggle:last-child {
-            border-bottom: none;
-        }
-        .toggle-label {
-            font-weight: 500;
-            color: #374151;
-        }
-        .switch {
-            position: relative;
-            width: 56px;
-            height: 32px;
-            background: #d1d5db;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            flex-shrink: 0;
-        }
-        .switch.active {
-            background: #4f46e5;
-        }
-        .switch::after {
-            content: '';
-            position: absolute;
-            width: 28px;
-            height: 28px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .switch.active::after {
-            transform: translateX(24px);
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 32px 20px;
-        }
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4f46e5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-text {
-            font-size: 16px;
-            color: #6b7280;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        /* Mobile-specific optimizations */
-        @media (max-width: 320px) {
-            body { padding: 16px; }
-            .btn { padding: 14px 16px; font-size: 15px; }
-            .status { padding: 16px; }
-            .logo { font-size: 20px; }
-        }
-        
-        /* Touch feedback */
-        .btn:active, .switch:active, .stat:active {
-            opacity: 0.8;
-        }
-        
-        /* Prevent text selection on mobile */
-        .switch, .btn, .stat {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            background: #fecaca; 
+            color: #dc2626; 
+            border: 2px solid #fca5a5;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">🛡️ PhishGuard</div>
-        <div class="subtitle">AI Protection Active</div>
+        <div class="logo">🛡️ TRUST EYE</div>
+        <div style="font-size: 12px; color: #6b7280;">Threat Detection</div>
     </div>
     
-    <div id="status" class="status safe">
-        <div class="status-icon">✅</div>
-        <div class="status-text">
-            <div class="status-title">Page is Safe</div>
-            <div class="status-desc">No threats detected</div>
-        </div>
-    </div>
+    <textarea id="textInput" placeholder="Paste suspicious text or URL here...">URGENT! Your account will be suspended. Click here now to verify.</textarea>
     
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-label">Links Scanned Today</div>
-            <div class="stat-number" id="scanned">0</div>
-        </div>
-        <div class="stat">
-            <div class="stat-label">Threats Blocked</div>
-            <div class="stat-number" id="blocked">0</div>
-        </div>
-    </div>
+    <button id="analyzeBtn">🔍 Analyze Text</button>
     
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text">Scanning page...</div>
-    </div>
-    
-    <button class="btn btn-primary" onclick="scanCurrentPage()">
-        <span>🔍</span>
-        <span>Scan This Page</span>
-    </button>
-    
-    <button class="btn btn-secondary" onclick="openDashboard()">
-        <span>📊</span>
-        <span>View Dashboard</span>
-    </button>
-    
-    <div class="toggle-section">
-        <div class="toggle">
-            <div class="toggle-label">Real-time Protection</div>
-            <div class="switch active" id="protectionToggle" onclick="toggleProtection()"></div>
-        </div>
-        
-        <div class="toggle">
-            <div class="toggle-label">Link Hover Scanning</div>
-            <div class="switch active" id="hoverToggle" onclick="toggleHoverScan()"></div>
-        </div>
-        
-        <div class="toggle">
-            <div class="toggle-label">Show Notifications</div>
-            <div class="switch active" id="notificationToggle" onclick="toggleNotifications()"></div>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <button class="btn btn-secondary" onclick="openSettings()" style="font-size: 14px; min-height: 48px;">
-            <span>⚙️</span>
-            <span>Settings & Help</span>
-        </button>
-    </div>
-    
+    <div id="result" class="result"></div>
+
     <script>
-        let stats = { scanned: 0, blocked: 0 }
-        let settings = { 
-            protection: true, 
-            hoverScan: true, 
-            notifications: true 
-        }
+        console.log('TrustEye popup script loaded');
         
-        // Load saved data
-        chrome.storage.local.get(['stats', 'settings'], (result) => {
-            if (result.stats) {
-                stats = result.stats
-                updateStats()
-            }
-            if (result.settings) {
-                settings = result.settings
-                updateToggles()
-            }
-        })
-        
-        function updateStats() {
-            document.getElementById('scanned').textContent = stats.scanned
-            document.getElementById('blocked').textContent = stats.blocked
-        }
-        
-        function updateToggles() {
-            document.getElementById('protectionToggle').classList.toggle('active', settings.protection)
-            document.getElementById('hoverToggle').classList.toggle('active', settings.hoverScan)
-            document.getElementById('notificationToggle').classList.toggle('active', settings.notifications)
-        }
-        
-        function scanCurrentPage() {
-            document.getElementById('loading').style.display = 'block'
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
             
-            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                chrome.tabs.sendMessage(tabs[0].id, {action: 'scanPage'}, (response) => {
-                    document.getElementById('loading').style.display = 'none'
-                    
-                    if (response && response.result) {
-                        updateStatus(response.result)
-                        stats.scanned++
-                        if (response.result.is_suspicious) {
-                            stats.blocked++
-                        }
-                        updateStats()
-                        saveStats()
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const textInput = document.getElementById('textInput');
+            const resultDiv = document.getElementById('result');
+            
+            if (!analyzeBtn || !textInput || !resultDiv) {
+                console.error('Elements not found');
+                return;
+            }
+            
+            analyzeBtn.addEventListener('click', function() {
+                console.log('Button clicked');
+                
+                const text = textInput.value.trim();
+                console.log('Text:', text);
+                
+                if (!text) {
+                    resultDiv.innerHTML = 'Please enter text to analyze';
+                    resultDiv.className = 'result';
+                    resultDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Analysis
+                let threatScore = 0;
+                const patterns = ['urgent', 'suspended', 'verify', 'click here', 'immediately'];
+                
+                patterns.forEach(pattern => {
+                    if (text.toLowerCase().includes(pattern)) {
+                        threatScore += 20;
                     }
-                })
-            })
-        }
-        
-        function updateStatus(result) {
-            const statusEl = document.getElementById('status')
-            
-            if (result.is_suspicious) {
-                statusEl.className = 'status danger'
-                statusEl.innerHTML = `
-                    <div class="status-icon">⚠️</div>
-                    <div class="status-text">
-                        <div class="status-title">Threat Detected!</div>
-                        <div class="status-desc">Risk Level: ${getRiskLevel(result.confidence)}</div>
-                    </div>
-                `
-            } else {
-                statusEl.className = 'status safe'
-                statusEl.innerHTML = `
-                    <div class="status-icon">✅</div>
-                    <div class="status-text">
-                        <div class="status-title">Page is Safe</div>
-                        <div class="status-desc">No threats detected</div>
-                    </div>
-                `
-            }
-        }
-        
-        function getRiskLevel(confidence) {
-            if (confidence >= 0.8) return 'HIGH'
-            if (confidence >= 0.5) return 'MEDIUM'
-            return 'LOW'
-        }
-        
-        function toggleProtection() {
-            settings.protection = !settings.protection
-            updateToggles()
-            saveSettings()
-            sendSettingsUpdate()
-        }
-        
-        function toggleHoverScan() {
-            settings.hoverScan = !settings.hoverScan
-            updateToggles()
-            saveSettings()
-            sendSettingsUpdate()
-        }
-        
-        function toggleNotifications() {
-            settings.notifications = !settings.notifications
-            updateToggles()
-            saveSettings()
-            sendSettingsUpdate()
-        }
-        
-        function sendSettingsUpdate() {
-            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    action: 'updateSettings',
-                    settings: settings
-                })
-            })
-        }
-        
-        function saveStats() {
-            chrome.storage.local.set({ stats: stats })
-        }
-        
-        function saveSettings() {
-            chrome.storage.local.set({ settings: settings })
-        }
-        
-        function openDashboard() {
-            chrome.tabs.create({ url: 'http://localhost:3000/dashboard' })
-        }
-        
-        function openSettings() {
-            chrome.tabs.create({ url: 'http://localhost:3000/about' })
-        }
-        
-        // Auto-scan on popup open (with delay for mobile)
-        setTimeout(scanCurrentPage, 800)
-        
-        // Add haptic feedback for mobile (if supported)
-        function addHapticFeedback() {
-            if (navigator.vibrate) {
-                navigator.vibrate(50)
-            }
-        }
-        
-        // Add haptic feedback to buttons
-        document.querySelectorAll('.btn, .switch').forEach(el => {
-            el.addEventListener('touchstart', addHapticFeedback)
-        })
+                });
+                
+                const isPhishing = threatScore > 30;
+                console.log('Result:', { threatScore, isPhishing });
+                
+                resultDiv.innerHTML = `
+                    <strong>${isPhishing ? '⚠️ THREAT DETECTED' : '✅ LOOKS SAFE'}</strong><br>
+                    Risk Score: ${threatScore}%<br>
+                    ${isPhishing ? 'Multiple suspicious patterns found' : 'No threats detected'}
+                `;
+                resultDiv.className = `result ${isPhishing ? 'danger' : 'safe'}`;
+                resultDiv.style.display = 'block';
+            });
+        });
     </script>
 </body>
 </html>
