@@ -19,6 +19,25 @@ interface AnalysisResultsProps {
 }
 
 export function AnalysisResults({ result }: AnalysisResultsProps) {
+  // Add safety checks
+  if (!result) {
+    return (
+      <Card className="border-2 border-dashed">
+        <CardContent className="text-center text-muted-foreground py-12">
+          <AlertTriangle className="h-20 w-20 mx-auto mb-6 opacity-20" />
+          <h3 className="mb-2">No analysis result</h3>
+          <p>Please try scanning again</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const safeResult = {
+    riskLevel: result.riskLevel || "medium",
+    score: result.score || 0,
+    flags: result.flags || []
+  };
+
   const getRiskColor = (level: string) => {
     switch (level) {
       case "low":
@@ -79,14 +98,14 @@ export function AnalysisResults({ result }: AnalysisResultsProps) {
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      <Alert className={`${getRiskColor(result.riskLevel)} border-2`}>
+      <Alert className={`${getRiskColor(safeResult.riskLevel)} border-2`}>
         <div className="flex items-start gap-3">
-          {getRiskIcon(result.riskLevel)}
+          {getRiskIcon(safeResult.riskLevel)}
           <div className="flex-1">
             <AlertTitle className="capitalize">
-              {result.riskLevel} Risk Level
+              {safeResult.riskLevel} Risk Level
             </AlertTitle>
-            <AlertDescription>{getRiskMessage(result.riskLevel)}</AlertDescription>
+            <AlertDescription>{getRiskMessage(safeResult.riskLevel)}</AlertDescription>
           </div>
         </div>
       </Alert>
@@ -95,11 +114,11 @@ export function AnalysisResults({ result }: AnalysisResultsProps) {
         <CardHeader>
           <CardTitle>Risk Score</CardTitle>
           <CardDescription>
-            Score: {result.score}/100 (Higher score = Higher risk)
+            Score: {safeResult.score}/100 (Higher score = Higher risk)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
-          <Progress value={result.score} className="h-4" />
+          <Progress value={safeResult.score} className="h-4" />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>Safe</span>
             <span>Dangerous</span>
@@ -107,22 +126,22 @@ export function AnalysisResults({ result }: AnalysisResultsProps) {
         </CardContent>
       </Card>
 
-      {result.flags.length > 0 && (
+      {safeResult.flags.length > 0 && (
         <Card className="border-2">
           <CardHeader>
-            <CardTitle>Red Flags Detected ({result.flags.length})</CardTitle>
+            <CardTitle>Red Flags Detected ({safeResult.flags.length})</CardTitle>
             <CardDescription>
               Issues found in the analyzed message
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {result.flags.map((flag, index) => (
+            {safeResult.flags.map((flag, index) => (
               <div key={index} className="border-l-4 border-destructive pl-4 py-3 bg-muted/30 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span>{flag.category}</span>
-                  {getSeverityBadge(flag.severity)}
+                  <span>{flag.category || "Unknown"}</span>
+                  {getSeverityBadge(flag.severity || "medium")}
                 </div>
-                <p className="text-muted-foreground">{flag.description}</p>
+                <p className="text-muted-foreground">{flag.description || "No description available"}</p>
               </div>
             ))}
           </CardContent>

@@ -70,6 +70,8 @@ export default function App() {
     try {
       let analysis;
       
+      console.log('Starting analysis for:', scanType, input.substring(0, 50));
+      
       // Always use backend API with fallback
       try {
         if (scanType === "text") {
@@ -77,10 +79,30 @@ export default function App() {
         } else {
           analysis = await analyzeURLWithBackend(input);
         }
+        console.log('Backend analysis result:', analysis);
       } catch (backendError) {
         console.warn('Backend failed, falling back to frontend analysis');
         // Fallback to frontend analysis
-        analysis = scanType === "text" ? analyzeText(input) : analyzeURL(input);
+        try {
+          analysis = scanType === "text" ? analyzeText(input) : analyzeURL(input);
+          console.log('Frontend analysis result:', analysis);
+        } catch (frontendError) {
+          console.error('Frontend analysis also failed:', frontendError);
+          // Create a basic result to prevent white screen
+          analysis = {
+            riskLevel: "medium" as const,
+            score: 50,
+            flags: [{
+              category: "Analysis Error",
+              description: "Unable to complete analysis. Please try again.",
+              severity: "medium" as const
+            }]
+          };
+        }
+      }
+      
+      if (!analysis) {
+        throw new Error('No analysis result generated');
       }
       
       setResult(analysis);
@@ -97,7 +119,7 @@ export default function App() {
         id: Date.now().toString(),
         type: scanType,
         input: input.substring(0, 100) + (input.length > 100 ? '...' : ''), // Truncate for storage
-        result: `${analysis.flags.length} flags detected`,
+        result: `${analysis.flags?.length || 0} flags detected`,
         riskLevel: analysis.riskLevel,
         timestamp: new Date().toISOString()
       };
@@ -105,7 +127,17 @@ export default function App() {
       setScanHistory(prev => [scanRecord, ...prev.slice(0, 49)]); // Keep last 50 scans
       
     } catch (error) {
-      console.error('Analysis failed:', error);
+      console.error('Analysis failed completely:', error);
+      // Set a fallback result to prevent white screen
+      setResult({
+        riskLevel: "medium",
+        score: 0,
+        flags: [{
+          category: "System Error",
+          description: "Analysis system encountered an error. Please refresh and try again.",
+          severity: "medium"
+        }]
+      });
     } finally {
       setIsAnalyzing(false);
     }
