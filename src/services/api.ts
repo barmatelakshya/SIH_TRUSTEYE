@@ -1,3 +1,5 @@
+import { analyzeText, analyzeURL } from '../utils/scamDetection';
+
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://your-backend-url.herokuapp.com/api'  // Replace with your deployed backend URL
   : 'http://localhost:5001/api';
@@ -100,44 +102,9 @@ export async function analyzeTextWithBackend(text: string): Promise<FrontendAnal
     return convertBackendResponse(backendResult);
   } catch (error) {
     console.error('Backend analysis error, falling back to client-side:', error);
-    // Fallback to client-side analysis
-    return analyzeTextClientSide(text);
+    // Fallback to full client-side analysis
+    return analyzeText(text);
   }
-}
-
-// Client-side fallback analysis
-function analyzeTextClientSide(text: string): FrontendAnalysisResult {
-  const flags: Array<{
-    category: string;
-    description: string;
-    severity: "low" | "medium" | "high";
-  }> = [];
-
-  let score = 0;
-  
-  // Basic phishing patterns
-  const phishingPatterns = [
-    /urgent.*action.*required/i,
-    /verify.*account.*immediately/i,
-    /suspended.*account/i,
-    /click.*here.*now/i,
-    /limited.*time.*offer/i
-  ];
-
-  phishingPatterns.forEach(pattern => {
-    if (pattern.test(text)) {
-      score += 20;
-      flags.push({
-        category: "Phishing Pattern",
-        description: "Suspicious urgency language detected",
-        severity: "high"
-      });
-    }
-  });
-
-  const riskLevel = score > 60 ? 'critical' : score > 40 ? 'high' : score > 20 ? 'medium' : 'low';
-  
-  return { riskLevel, score, flags };
 }
 
 export async function analyzeURLWithBackend(url: string): Promise<FrontendAnalysisResult> {
@@ -157,7 +124,8 @@ export async function analyzeURLWithBackend(url: string): Promise<FrontendAnalys
     const backendResult: BackendAnalysisResult = await response.json();
     return convertBackendResponse(backendResult);
   } catch (error) {
-    console.error('Backend URL analysis error:', error);
-    throw error;
+    console.error('Backend URL analysis error, falling back to client-side:', error);
+    // Fallback to full client-side analysis
+    return analyzeURL(url);
   }
 }
