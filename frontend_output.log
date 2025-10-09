@@ -7,3 +7,8 @@
 
   ➜  Local:   http://localhost:5173/SIH_TRUSTEYE/
   ➜  Network: use --host to expose
+6:44:43 pm [vite] vite.config.js changed, restarting server...
+6:44:43 pm [vite] server restarted.
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose

@@ -11,3 +11,8 @@ TrustEye Backend Server Starting...
 127.0.0.1 - - [09/Oct/2025 18:38:36] "POST /api/scan/url HTTP/1.1" 200 -
 127.0.0.1 - - [09/Oct/2025 18:41:20] "POST /api/scan/text HTTP/1.1" 200 -
 127.0.0.1 - - [09/Oct/2025 18:41:33] "POST /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 18:45:21] "OPTIONS /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 18:45:21] "POST /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 18:45:23] "POST /api/scan/text HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 18:45:28] "OPTIONS /api/scan/url HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2025 18:45:28] "POST /api/scan/url HTTP/1.1" 200 -
